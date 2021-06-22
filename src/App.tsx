@@ -8,8 +8,57 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Grid from '@material-ui/core/Grid';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import Badge from '@material-ui/core/Badge';
+
+import AppBar from '@material-ui/core/AppBar';
+import CameraIcon from '@material-ui/icons/PhotoCamera';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import Link from '@material-ui/core/Link';
+
 // Styles
 import { Wrapper, StyledButton } from './App.styles';
+
+const useStyles = makeStyles((theme) => ({
+  icon: {
+    marginRight: theme.spacing(2),
+  },
+  heroContent: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(8, 0, 6),
+  },
+  heroButtons: {
+    marginTop: theme.spacing(4),
+  },
+  cardGrid: {
+    paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(8),
+  },
+  card: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  cardMedia: {
+    paddingTop: '56.25%', // 16:9
+  },
+  cardContent: {
+    flexGrow: 1,
+  },
+  footer: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(6),
+  },
+}));
+
+
+
 // Types
 export type CartItemType = {
   id: number;
@@ -20,6 +69,8 @@ export type CartItemType = {
   title: string;
   amount: number;
 };
+
+
 
 const getProducts = async (): Promise<CartItemType[]> =>
   await (await fetch('https://fakestoreapi.com/products')).json();
@@ -32,6 +83,8 @@ const App = () => {
     getProducts
   );
   console.log(data);
+
+  const classes = useStyles();
 
   const getTotalItems = (items: CartItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount, 0);
@@ -83,13 +136,15 @@ const App = () => {
           <AddShoppingCartIcon />
         </Badge>
       </StyledButton>
-      <Grid container spacing={3}>
-        {data?.map(item => (
-          <Grid item key={item.id} xs={12} sm={4}>
-            <Item item={item} handleAddToCart={handleAddToCart} />
-          </Grid>
-        ))}
-      </Grid>
+      <Container className={classes.cardGrid} maxWidth="md">
+        <Grid container spacing={2}>
+          {data?.map(item => (
+            <Grid item key={item.id} xs={12} sm={4}>
+              <Item item={item} handleAddToCart={handleAddToCart} />
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
     </Wrapper>
   );
 };
